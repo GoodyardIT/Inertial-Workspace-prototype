@@ -1,0 +1,7 @@
+{
+  "name": "DingTalk Culture Score Form System",
+  "description": "An enterprise-grade cultural values score application system that renders dynamic DingTalk OA forms, calculates scores automatically, and features Gemini-powered case optimization.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
