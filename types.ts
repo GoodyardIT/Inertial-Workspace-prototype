@@ -69,10 +69,12 @@ export interface StaffRecord {
   id: string;
   name: string;
   employeeId: string;
+  password: string;
   score: number;
+  loginCount: number; // 新增：登录次数统计
   status: 'active' | 'inactive';
   role: UserRole;
-  joinDate: string; // 新增：入职日期
+  joinDate: string;
   history?: PointHistoryEntry[];
 }
 

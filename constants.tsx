@@ -1,5 +1,5 @@
 
-import { FormTemplate, StaffRecord } from './types';
+import { FormTemplate, StaffRecord, UserRole } from './types';
 
 // 根据 CSV 附件整理的行为映射表
 export const BEHAVIOR_MAPPING: Record<string, Record<string, string[]>> = {
@@ -281,12 +281,56 @@ export const FORM_JSON: FormTemplate = {
   }
 };
 
-export const STAFF_LIST = [
-  { label: '张伟', value: 'zhangwei' },
-  { label: '王芳', value: 'wangfang' },
-  { label: '李娜', value: 'lina' },
-  { label: '刘强', value: 'liuqiang' },
+// 导入的 CSV 人员花名册数据 (共67人)
+export const RAW_STAFF_DATA = [
+  ["尹存美", "GY110006"], ["苏丽萍", "GY110003"], ["尹存折", "GY120008"], ["张利", "GY120010"], 
+  ["刘凤霞", "GY120007"], ["王夏夏", "GY130017"], ["刘志涛", "GY140023"], ["李晓惠", "GY140026"], 
+  ["潘贺贺", "GY140027"], ["魏传波", "GY150063"], ["秦婷", "GY150065"], ["施灵珊", "GY150069"], 
+  ["向小军", "GY170083"], ["刘怡聪", "GY170092"], ["霍红阳", "GY170087"], ["唐燕燕", "GY180099"], 
+  ["李金霞", "GY200122"], ["王宇", "GY200123"], ["杨中魁", "GY200128"], ["候新宇", "GY200129"], 
+  ["俞青", "GY210130"], ["王雪艳", "GY210131"], ["毕贞莹", "GY220132"], ["宋香芹", "GY220133"], 
+  ["陈佳宇", "GY220135"], ["牛涛", "GY230136"], ["李苗苗", "GY230137"], ["苏晓龙", "GY230138"], 
+  ["王小涵", "GY230139"], ["王浩菲", "GY230150"], ["孙欣宇", "GY230151"], ["尹迪", "GY240152"], 
+  ["车余佳", "GY240153"], ["金延举", "GY240515"], ["张一方", "GY240516"], ["高菁远", "GY240517"], 
+  ["刘加芬", "GY240518"], ["王广慧", "GY240519"], ["刘海印", "GY240520"], ["王汇甲", "GY240521"], 
+  ["刘雪梅", "GY240522"], ["葛文慧", "GY240523"], ["毕玉婕", "GY240525"], ["朱晓健", "GY240526"], 
+  ["董子源", "GY240527"], ["冯文婕", "GY240528"], ["刘洁", "GY240529"], ["宋强", "GY250530"], 
+  ["张兆晗", "GY250531"], ["于晓明", "GY250532"], ["于千惠", "GY250533"], ["刘梦飞", "GY250535"], 
+  ["张晓龙", "GY250536"], ["王佳昕", "GY250537"], ["李梦", "GY250538"], ["韩丹阳", "GY250539"], 
+  ["孙铬鞠", "GY250551"], ["刘璐姣", "GY250552"], ["王皓", "GY250555"], ["李文璇", "GY250557"], 
+  ["王梦瑶", "GY250559"], ["姜延举", "GY250561"], ["权清媛", "GY250562"], ["李若冰", "GY250563"], 
+  ["吕衍霖", "GY250565"], ["石晓涵", "GY250566"], ["韩萌", "GY250567"]
 ];
+
+export const STAFF_RECORDS: StaffRecord[] = RAW_STAFF_DATA.map((item, index) => {
+  const employeeId = item[1];
+  let role: UserRole = 'employee';
+  
+  // 根据要求设置特定工号的权限角色
+  if (employeeId === 'GY140023') {
+    role = 'super_admin'; // 超级管理员：刘志涛
+  } else if (employeeId === 'GY240153' || employeeId === 'GY170092') {
+    role = 'admin'; // 管理员：车余佳, 刘怡聪
+  }
+
+  return {
+    id: `staff-${index}`,
+    name: item[0],
+    employeeId: employeeId,
+    password: `${employeeId}@GY`,
+    score: 0,
+    loginCount: 0, // 初始登录次数为 0
+    status: 'active',
+    role: role,
+    joinDate: '2024-01-01',
+    history: []
+  };
+});
+
+export const STAFF_LIST = RAW_STAFF_DATA.map(item => ({
+  label: item[0],
+  value: item[1].toLowerCase()
+}));
 
 export const DEPARTMENT_LIST = [
   { label: '研发部', value: 'rd' },
@@ -300,36 +344,4 @@ export const POSITION_LIST = [
   { label: '后端工程师', value: 'backend' },
   { label: '产品经理', value: 'pm' },
   { label: '客户主管', value: 'cs_manager' },
-];
-
-export const STAFF_RECORDS: StaffRecord[] = [
-  { 
-    id: '1', name: '张伟', employeeId: 'DT001', score: 125, status: 'active', role: 'super_admin', joinDate: '2021-06-15',
-    history: [
-      { id: 'h1', date: '2023-11-20', description: '成功解决双十一期间的核心链路阻塞问题', dimension: '专业专注', amount: 20, status: 'approved' },
-      { id: 'h2', date: '2023-12-05', description: '主动带教3名新入职后端工程师', dimension: '团队协作', amount: 15, status: 'approved' },
-      { id: 'h3', date: '2024-01-10', description: '优化前端构建工具，减少30%编译时间', dimension: '开放创新', amount: 10, status: 'approved' }
-    ]
-  },
-  { 
-    id: '2', name: '王芳', employeeId: 'DT002', score: 98, status: 'active', role: 'admin', joinDate: '2022-03-10',
-    history: [
-      { id: 'h4', date: '2023-10-15', description: '主导客户侧满意度调研并形成闭环报告', dimension: '客户至上', amount: 15, status: 'approved' },
-      { id: 'h5', date: '2023-12-12', description: '整理发布部门通用技术方案模板', dimension: '团队协作', amount: 8, status: 'approved' }
-    ]
-  },
-  { 
-    id: '3', name: '李娜', employeeId: 'DT003', score: 156, status: 'active', role: 'employee', joinDate: '2021-11-20',
-    history: [
-      { id: 'h6', date: '2023-11-01', description: '攻克大型政企客户私有化部署难题', dimension: '崇尚奋斗', amount: 25, status: 'approved' },
-      { id: 'h7', date: '2024-01-05', description: '提炼出3个可复用的业务中台组件', dimension: '开放创新', amount: 15, status: 'approved' }
-    ]
-  },
-  { 
-    id: '4', name: '刘强', employeeId: 'DT004', score: 42, status: 'inactive', role: 'employee', joinDate: '2023-08-01',
-    history: [
-      { id: 'h8', date: '2023-09-20', description: '日常技术分享会组织', dimension: '简单向上', amount: 5, status: 'approved' }
-    ]
-  },
-  { id: '5', name: '陈静', employeeId: 'DT005', score: 87, status: 'active', role: 'employee', joinDate: '2022-07-15', history: [] },
 ];
