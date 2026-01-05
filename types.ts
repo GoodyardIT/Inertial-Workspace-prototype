@@ -1,4 +1,7 @@
 
+export type UserRole = 'super_admin' | 'admin' | 'employee';
+export type ApprovalStatus = 'pending' | 'approved' | 'rejected';
+
 export interface FormOption {
   label: string;
   value: string;
@@ -52,9 +55,36 @@ export interface FormData {
   [key: string]: any;
 }
 
-export interface Submission {
+export interface PointHistoryEntry {
   id: string;
-  timestamp: string;
-  data: FormData;
-  status: 'pending' | 'approved' | 'rejected';
+  date: string;
+  description: string;
+  dimension: string;
+  amount: number;
+  status: 'approved' | 'pending' | 'rejected';
+  opinion?: string;
+}
+
+export interface StaffRecord {
+  id: string;
+  name: string;
+  employeeId: string;
+  score: number;
+  status: 'active' | 'inactive';
+  role: UserRole;
+  joinDate: string; // 新增：入职日期
+  history?: PointHistoryEntry[];
+}
+
+export interface ApplicationRequest {
+  id: string;
+  applicantId: string;
+  applicantName: string;
+  title: string;
+  dimension: string;
+  description: string;
+  requestedScore: number;
+  submitTime: string;
+  status: ApprovalStatus;
+  adminOpinion?: string;
 }
