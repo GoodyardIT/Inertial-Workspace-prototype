@@ -94,6 +94,7 @@ export const FORM_JSON: FormTemplate = {
       "name": "applicant_department",
       "label": "所在部门",
       "required": true,
+      "hidden": true, // 暂时隐藏，后期启用
       "props": {
         "placeholder": "请选择部门"
       }
@@ -103,6 +104,7 @@ export const FORM_JSON: FormTemplate = {
       "name": "applicant_position",
       "label": "岗位",
       "required": true,
+      "hidden": true, // 暂时隐藏，后期启用
       "props": {
         "placeholder": "请选择岗位",
         "dataSource": "positionList"
